@@ -1,0 +1,431 @@
+import { useState, useRef } from "react";
+import ReactCrop, { Crop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Loader2, ImagePlus, RefreshCw, CropIcon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+interface ImageGenerationModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onImageGenerated: (imageUrl: string) => void;
+}
+
+const aspectRatios = [
+  { label: "Landscape (16:9)", value: "landscape", size: "1792x1024" },
+  { label: "Square (1:1)", value: "square", size: "1024x1024" },
+  { label: "Portrait (9:16)", value: "portrait", size: "1024x1792" },
+];
+
+function getCroppedImg(image: HTMLImageElement, crop: Crop): Promise<string> {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!image.complete) {
+        reject(new Error("Image not fully loaded"));
+        return;
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.floor(crop.width);
+      canvas.height = Math.floor(crop.height);
+
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) {
+        reject(new Error("Failed to get canvas context"));
+        return;
+      }
+
+      ctx.imageSmoothingQuality = "high";
+      ctx.imageSmoothingEnabled = true;
+
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+
+      const sourceX = Math.max(0, Math.floor(crop.x * scaleX));
+      const sourceY = Math.max(0, Math.floor(crop.y * scaleY));
+      const sourceWidth = Math.min(
+        Math.floor(crop.width * scaleX),
+        image.naturalWidth - sourceX,
+      );
+      const sourceHeight = Math.min(
+        Math.floor(crop.height * scaleY),
+        image.naturalHeight - sourceY,
+      );
+
+      ctx.drawImage(
+        image,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        crop.width,
+        crop.height,
+      );
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            reject(new Error("Failed to create image blob"));
+            return;
+          }
+          resolve(URL.createObjectURL(blob));
+        },
+        "image/jpeg",
+        0.95,
+      );
+    } catch (error) {
+      console.error("Error in image cropping:", error);
+      reject(error);
+    }
+  });
+}
+
+export function ImageGenerationModal({
+  open,
+  onOpenChange,
+  onImageGenerated,
+}: ImageGenerationModalProps) {
+  const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [aspectRatio, setAspectRatio] = useState(aspectRatios[0].value);
+  const [isCropping, setIsCropping] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState<string>("");
+  const [crop, setCrop] = useState<Crop>({
+    unit: "%",
+    width: 80,
+    height: 80,
+    x: 10,
+    y: 10,
+  });
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const { toast } = useToast();
+
+  const handleGenerate = async () => {
+    if (!prompt.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          "Please enter a description for the image you want to generate",
+      });
+      return;
+    }
+
+    setLoading(true);
+    setImageLoading(true);
+    setLoadingProgress("Generating image...");
+
+    try {
+      const selectedRatio = aspectRatios.find(
+        (ratio) => ratio.value === aspectRatio,
+      );
+
+      setLoadingProgress("Sending request to API...");
+      const response = await fetch("/api/images/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: prompt.trim(),
+          size: selectedRatio?.size || "1792x1024",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.details || errorData.error || "Failed to generate image",
+        );
+      }
+
+      setLoadingProgress("Processing generated image...");
+
+      const data = await response.json();
+
+      if (!data.success || !data.url) {
+        throw new Error("Invalid response from server");
+      }
+
+      // Create a new image element for preloading
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => {
+          imgRef.current = img;
+          setGeneratedImage(data.url);
+          setIsCropping(false);
+          setImageLoading(false);
+          setLoadingProgress("");
+          resolve();
+        };
+        img.onerror = () => {
+          reject(new Error("Failed to load generated image"));
+        };
+        img.src = data.url;
+      });
+
+      toast({
+        title: "Success",
+        description: "Image generated successfully!",
+      });
+    } catch (error: any) {
+      console.error("Image generation error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          error.message || "Failed to generate image. Please try again.",
+      });
+      setImageLoading(false);
+      setLoadingProgress("");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartCrop = () => {
+    setIsCropping(true);
+  };
+
+  const handleCropComplete = async () => {
+    if (!imgRef.current) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Image reference not found.",
+      });
+      return;
+    }
+
+    if (!crop || !crop.width || !crop.height) {
+      toast({
+        variant: "destructive",
+        title: "Invalid Selection",
+        description: "Please select a valid crop area first.",
+      });
+      return;
+    }
+
+    try {
+      // Capture the current image before cropping
+      const originalSrc = generatedImage;
+      
+      // Get the cropped image URL
+      const croppedImageUrl = await getCroppedImg(imgRef.current, crop);
+      
+      // Create a new image for the cropped result
+      const newImg = new Image();
+      newImg.crossOrigin = "anonymous";
+      
+      // Wait for the new image to load
+      await new Promise<void>((resolve, reject) => {
+        newImg.onload = () => {
+          // Update the image reference with new cropped image
+          imgRef.current = newImg;
+          resolve();
+        };
+        newImg.onerror = () => {
+          // If loading the cropped image fails, revert to original
+          reject(new Error("Failed to load cropped image"));
+        };
+        newImg.src = croppedImageUrl;
+      });
+
+      // Update the UI state with the new cropped image
+      setGeneratedImage(croppedImageUrl);
+      setIsCropping(false);
+
+      toast({
+        title: "Success",
+        description: "Image cropped successfully!",
+      });
+    } catch (error) {
+      console.error("Error cropping image:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to crop image. Please try again.",
+      });
+    }
+  };
+
+  const handleAddImage = () => {
+    if (generatedImage) {
+      onImageGenerated(generatedImage);
+      onOpenChange(false);
+      setPrompt("");
+      setGeneratedImage(null);
+      setIsCropping(false);
+      setCrop({
+        unit: "%",
+        width: 90,
+        height: 90,
+        x: 5,
+        y: 5,
+      });
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[825px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Generate Image with AI</DialogTitle>
+          <DialogDescription>
+            Describe the image you want to create and select your preferred
+            aspect ratio.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+          <div className="space-y-4">
+            <div className="grid gap-2">
+              <Label>Aspect Ratio</Label>
+              <Select value={aspectRatio} onValueChange={setAspectRatio}>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Select aspect ratio" />
+                </SelectTrigger>
+                <SelectContent>
+                  {aspectRatios.map((ratio) => (
+                    <SelectItem key={ratio.value} value={ratio.value}>
+                      {ratio.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="prompt">Image Description</Label>
+              <div className="flex items-start gap-2">
+                <div className="flex-1">
+                  <Input
+                    id="prompt"
+                    placeholder="Describe the image you want to generate..."
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+                <Button
+                  onClick={handleGenerate}
+                  disabled={loading || !prompt.trim()}
+                  className="whitespace-nowrap"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {loadingProgress || "Generating..."}
+                    </>
+                  ) : (
+                    <>
+                      <ImagePlus className="mr-2 h-4 w-4" />
+                      Generate
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {generatedImage && (
+            <div className="space-y-2">
+              <div
+                className={`relative w-full overflow-hidden border rounded-lg ${
+                  aspectRatio === "landscape"
+                    ? "aspect-video"
+                    : aspectRatio === "portrait"
+                      ? "aspect-[9/16] max-h-[60vh]"
+                      : "aspect-square"
+                }`}
+              >
+                {imageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-50">
+                    <div className="text-center">
+                      <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">
+                        {loadingProgress}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {isCropping ? (
+                  <ReactCrop
+                    crop={crop}
+                    onChange={(c) => setCrop(c)}
+                    aspect={undefined}
+                  >
+                    <img
+                      ref={imgRef}
+                      src={generatedImage}
+                      alt="Generated"
+                      className="w-full h-full object-contain"
+                      crossOrigin="anonymous"
+                      onLoad={() => setImageLoading(false)}
+                    />
+                  </ReactCrop>
+                ) : (
+                  <img
+                    ref={imgRef}
+                    src={generatedImage}
+                    alt="Generated"
+                    className="w-full h-full object-contain"
+                    crossOrigin="anonymous"
+                    onLoad={() => setImageLoading(false)}
+                  />
+                )}
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setGeneratedImage(null);
+                    setImageLoading(false);
+                    setLoadingProgress("");
+                  }}
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Generate Another
+                </Button>
+                {isCropping ? (
+                  <Button onClick={handleCropComplete}>Apply Crop</Button>
+                ) : (
+                  <>
+                    <Button variant="outline" onClick={handleStartCrop}>
+                      <CropIcon className="mr-2 h-4 w-4" />
+                      Crop Image
+                    </Button>
+                    <Button onClick={handleAddImage}>Add to Editor</Button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}

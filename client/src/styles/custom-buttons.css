@@ -1,0 +1,18 @@
+
+/* Custom Button Hover Effects */
+button.bg-secondary:hover {
+  background-color: hsl(var(--secondary-hover)) !important;
+}
+
+[data-theme="dark"] button.bg-secondary {
+  background-color: hsl(var(--secondary)) !important;
+}
+
+[data-theme="dark"] button.bg-secondary:hover {
+  background-color: hsl(var(--secondary-hover)) !important;
+}
+
+/* Override the tailwind hover class */
+.hover\:bg-secondary\/80:hover {
+  background-color: hsl(var(--secondary-hover)) !important;
+}

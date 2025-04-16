@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Column Test</title>
+  
+  <!--[if mso]>
+  <style type="text/css">
+    table {border-collapse:collapse;border-spacing:0;margin:0;}
+    div, td {padding:0;}
+    div {margin:0 !important;}
+    v\:roundrect {behavior:url(#default#VML);}
+  </style>
+  <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+  </xml>
+  <![endif]-->
+  
+  <style type="text/css">
+    /* Base styles */
+    body { 
+      margin: 0; 
+      padding: 0; 
+      min-width: 100%; 
+      width: 100% !important; 
+      height: 100% !important; 
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    table, td { 
+      mso-table-lspace: 0pt; 
+      mso-table-rspace: 0pt; 
+      border-collapse: collapse !important; 
+      border-spacing: 0; 
+    }
+    img { 
+      border: 0; 
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Base styles for columns - these are only used in modern clients as we now use tables */
+    .stack-column {
+      display: table-cell;
+      width: 50%;
+      vertical-align: top;
+    }
+    /* Table cell styles for column layouts */
+    table td[width="50%"] {
+      width: 50%;
+    }
+
+    /* Responsive adjustments */
+    @media screen and (max-width: 700px) {
+      .responsive-table {
+        width: 100% !important;
+      }
+      /* Improved column stacking for mobile */
+      .stack-column {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        direction: ltr !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      /* For multi-column tables */
+      table[width="100%"] td[width="50%"] {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin-bottom: 20px !important;
+      }
+      /* Table targeting for column layout */
+      table td[width="50%"],
+      table td[style*="width: 50%"] {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .mobile-first {
+        display: table-header-group !important;
+      }
+      .mobile-second {
+        display: table-footer-group !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div style="background-color: #f5f5f5; margin: 0; padding: 20px; width: 100%;">
+    <div style="max-width: 700px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 20px;">
+      <h1 style="text-align: center; margin-bottom: 30px;">Two-Column Email Test</h1>
+      
+      <!-- Email Two-Column Layout -->
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="table-layout: fixed; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+        <tr>
+          <!-- Left column -->
+          <td valign="top" align="center" width="50%" style="width: 50%; padding: 0 8px 0 0; vertical-align: top;">
+            <!-- Nested table to contain column content -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+              <tr>
+                <td valign="top" align="left" style="padding: 0; vertical-align: top; text-align: left; background-color: #f2f2f2; padding: 15px; border-radius: 8px;">
+                  <h2 style="margin-top: 0;">Left Column</h2>
+                  <p>This content should stay in the left column regardless of email client.</p>
+                  <p>It should also stack properly on mobile.</p>
+                  <ul style="text-align: left; padding-left: 20px;">
+                    <li>Bullet point test</li>
+                    <li>Another point</li>
+                  </ul>
+                </td>
+              </tr>
+            </table>
+          </td>
+          
+          <!-- Right column -->
+          <td valign="top" align="center" width="50%" style="width: 50%; padding: 0 0 0 8px; vertical-align: top;">
+            <!-- Nested table to contain column content -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+              <tr>
+                <td valign="top" align="left" style="padding: 0; vertical-align: top; text-align: left; background-color: #e6f7ff; padding: 15px; border-radius: 8px;">
+                  <h2 style="margin-top: 0;">Right Column</h2>
+                  <p>This content should stay in the right column regardless of email client.</p>
+                  <p>It should also stack properly on mobile.</p>
+                  <ol style="text-align: left; padding-left: 20px;">
+                    <li>First numbered item</li>
+                    <li>Second numbered item</li>
+                  </ol>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      
+      <div style="margin-top: 30px; text-align: center;">
+        <hr style="border: 0; border-top: 1px solid #eaeaea; margin: 20px 0;">
+        <p style="color: #666;">Test template for email columns</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

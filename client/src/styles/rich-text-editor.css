@@ -1,0 +1,1101 @@
+/* Cursor styles for editable content */
+.rich-text-editor [contenteditable="true"] {
+  cursor: text !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+/* Keep default cursor for non-editable elements */
+.rich-text-editor [contenteditable="false"],
+.rich-text-editor .image-block,
+.rich-text-editor .icons-container,
+.rich-text-editor .button-block {
+  cursor: default !important;
+}
+
+/* Drag Handle Styles */
+.rich-text-editor [data-block-id] {
+  position: relative;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, opacity 0.15s ease-out;
+  height: auto !important; /* Prevent vertical growth */
+  max-height: none; /* Allow natural content height */
+  overflow: visible; /* Ensure content isn't clipped */
+  margin-bottom: 8px !important; /* Reduced margin for better spacing in editor */
+  transform-origin: center center; /* Ensure smooth scaling */
+  contain: layout; /* Improve performance */
+}
+
+.rich-text-editor [data-block-id] .absolute.inset-0 {
+  pointer-events: none;
+}
+
+.rich-text-editor [data-block-id] .absolute.top-0,
+.rich-text-editor [data-block-id] .absolute.bottom-0,
+.rich-text-editor [data-block-id] .absolute.left-0,
+.rich-text-editor [data-block-id] .absolute.right-0 {
+  pointer-events: auto;
+  cursor: move;
+  transition: background-color 0.15s ease;
+}
+
+.rich-text-editor [data-block-id] .absolute.top-0:hover,
+.rich-text-editor [data-block-id] .absolute.bottom-0:hover,
+.rich-text-editor [data-block-id] .absolute.left-0:hover,
+.rich-text-editor [data-block-id] .absolute.right-0:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* When dragging, add visual feedback */
+.rich-text-editor [data-block-id].opacity-50 {
+  transform: scale(1.01);
+  box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.1), 0 6px 8px -5px rgba(0, 0, 0, 0.04);
+  z-index: 10;
+  backdrop-filter: blur(1px);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hide side controls until hovered, but keep the editor header toolbar visible */
+.rich-text-editor .group .flex.items-center.gap-2 > .flex.items-center.gap-1 {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.rich-text-editor .group:hover .flex.items-center.gap-2 > .flex.items-center.gap-1 {
+  opacity: 1;
+}
+
+/* Ensure the editor header toolbar buttons remain visible */
+.rich-text-editor .editor-header .flex.items-center.gap-2,
+.rich-text-editor .editor-header .flex.items-center.gap-1,
+.rich-text-editor .editor-header button {
+  opacity: 1 !important;
+}
+
+/* Prevent text selection on drag handle */
+.rich-text-editor .cursor-move {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+/* Hide drag handles until hovered */
+.rich-text-editor .absolute.inset-0 {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.rich-text-editor .group:hover .absolute.inset-0 {
+  opacity: 0.3;
+}
+
+/* Text selection highlighting styles */
+.rich-text-editor [contenteditable="true"]::selection {
+  background-color: rgba(96, 84, 214, 0.2) !important;
+  /* Light purple to match theme */
+  color: inherit !important;
+}
+
+.rich-text-editor [contenteditable="true"]::-moz-selection {
+  background-color: rgba(96, 84, 214, 0.2) !important;
+  color: inherit !important;
+}
+
+/* Dark mode selection styles */
+[data-theme="dark"] .rich-text-editor [contenteditable="true"]::selection {
+  background-color: rgba(96, 84, 214, 0.4) !important;
+  /* Slightly more opaque for dark mode */
+  color: inherit !important;
+}
+
+[data-theme="dark"] .rich-text-editor [contenteditable="true"]::-moz-selection {
+  background-color: rgba(96, 84, 214, 0.4) !important;
+  color: inherit !important;
+}
+
+/* Default center alignment for all content blocks */
+.rich-text-editor [data-block-type="image"],
+.rich-text-editor [data-block-type="icons"],
+.rich-text-editor .button-block,
+.rich-text-editor [contenteditable="true"] {
+  text-align: center !important;
+  display: block;
+  width: 100%;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  will-change: transform, opacity;
+}
+
+/* Ensure images are centered by default */
+.rich-text-editor .image-wrapper {
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Set default attribute for image and icon blocks */
+.rich-text-editor [data-block-type="image"],
+.rich-text-editor [data-block-type="icons"] {
+  data-align: "center";
+}
+
+/* Override inline styles for AI-generated content */
+.rich-text-editor .newsletter-content,
+.rich-text-editor .preview-content,
+.newsletter-preview {
+  text-align: center !important;
+}
+
+/* Ensure paragraphs are centered by default */
+.rich-text-editor p {
+  text-align: center !important;
+}
+
+/* Preview content alignment styles */
+.preview-content [data-alignment="center"],
+.preview-content [style*="text-align: center"],
+.preview-content [style*="text-align:center"],
+.preview-container [data-alignment="center"],
+.newsletter-preview [data-alignment="center"] {
+  text-align: center !important;
+}
+
+/* Ensure all text blocks in preview are centered */
+.preview-content p,
+.preview-content h1,
+.preview-content h2,
+.preview-content h3,
+.preview-content h4,
+.preview-content h5,
+.preview-content h6,
+.preview-content div {
+  text-align: center !important;
+}
+
+/* Lists should respect their alignment attributes */
+.preview-content ul,
+.preview-content ol {
+  text-align: inherit;
+}
+
+.preview-content ul[data-alignment="left"],
+.preview-content ol[data-alignment="left"] {
+  text-align: left !important;
+}
+
+.preview-content ul[data-alignment="center"],
+.preview-content ol[data-alignment="center"] {
+  text-align: center !important;
+}
+
+.preview-content ul[data-alignment="right"],
+.preview-content ol[data-alignment="right"] {
+  text-align: right !important;
+}
+
+.preview-content li {
+  text-align: inherit;
+}
+
+/* Override inline styles for AI-generated content */
+.rich-text-editor .newsletter-content,
+.rich-text-editor .preview-content,
+.newsletter-preview {
+  text-align: center !important;
+}
+
+/* Ensure paragraphs are centered by default */
+.rich-text-editor p {
+  text-align: center !important;
+}
+
+/* Override inline styles for AI-generated content */
+.rich-text-editor .newsletter-content,
+.rich-text-editor .preview-content,
+.newsletter-preview {
+  text-align: center !important;
+}
+
+/* Ensure paragraphs are centered by default */
+.rich-text-editor p {
+  text-align: center !important;
+}
+
+/* Rich Text Editor Specific Styles */
+
+/* Image Block Styles */
+.rich-text-editor .image-block {
+  margin: 0.5rem 0; /* Reduced margin for better spacing */
+  max-width: 100%;
+  position: relative;
+  transition: transform 0.15s ease-out, opacity 0.15s ease-out, box-shadow 0.15s ease-out;
+  will-change: transform, opacity;
+  border-radius: 0.5rem;
+  overflow: visible; /* Changed to visible to allow edit button to be outside */
+}
+
+.rich-text-editor .image-block img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+
+/* Edit button for images */
+.rich-text-editor .edit-image-button {
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 50 !important;
+  visibility: visible !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  color: white !important;
+  padding: 6px !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.rich-text-editor .image-block {
+  position: relative !important;
+}
+
+.rich-text-editor .image-block:hover .edit-image-button,
+.rich-text-editor [data-block-type="image"]:hover .edit-image-button {
+  opacity: 1 !important;
+}
+
+.rich-text-editor .edit-image-button:hover {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* In preview mode, always hide edit buttons */
+.preview-container .edit-image-button,
+.newsletter-preview .edit-image-button,
+[class*="preview"] .edit-image-button,
+[class*="newsletter"] .edit-image-button,
+.newsletter-preview [data-block-type="image"] .edit-image-button,
+.preview-content [data-block-type="image"] .edit-image-button,
+.preview-container [data-block-type="image"] .edit-image-button {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.rich-text-editor [data-block-type="image"],
+.rich-text-editor [data-block-type="icons"] {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.rich-text-editor [data-block-type="image"] .image-wrapper {
+  display: flex;
+  max-width: 100%;
+}
+
+/* Icon Container Base Styles */
+.rich-text-editor .icons-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  padding: 10px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative !important;
+  min-height: 48px !important;
+  width: 100% !important;
+  margin: 1rem 0 !important;
+  background-color: transparent !important;
+  max-width: none !important;
+  min-width: 300px !important;
+  overflow: visible !important;
+  z-index: 1 !important;
+}
+
+/* Individual Icon Styles */
+.rich-text-editor .icons-container a {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.75rem !important;
+  border-radius: 0.375rem !important;
+  transition: all 0.2s !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  margin: 4px !important;
+  flex: 0 0 auto !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  z-index: 2 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Icon SVG Styles */
+.rich-text-editor .icons-container svg {
+  width: 24px !important;
+  height: 24px !important;
+  color: #6054d6 !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Container wrapper */
+.rich-text-editor [data-block-type="icons"] {
+  display: block !important;
+  width: 100% !important;
+  margin: 1rem 0 !important;
+  text-align: center !important;
+  position: relative !important;
+  z-index: 1 !important;
+  overflow: visible !important;
+}
+
+/* Preview mode styles */
+.preview-content .icons-container,
+.newsletter-preview .icons-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  justify-content: center !important;
+  margin: 1rem 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  overflow: visible !important;
+}
+
+/* Ensure icons stay visible */
+.rich-text-editor .icons-container a,
+.rich-text-editor .icons-container svg,
+.preview-content .icons-container a,
+.preview-content .icons-container svg {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-flex !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure specific alignment styles are preserved */
+[style*="text-align:center"],
+[style*="text-align: center"],
+.preview-content [style*="text-align:center"],
+.preview-content [style*="text-align: center"],
+.newsletter-preview [style*="text-align:center"],
+.newsletter-preview [style*="text-align: center"] {
+  text-align: center !important;
+}
+
+[style*="text-align:right"],
+[style*="text-align: right"],
+.preview-content [style*="text-align:right"],
+.preview-content [style*="text-align: right"],
+.newsletter-preview [style*="text-align:right"],
+.newsletter-preview [style*="text-align: right"] {
+  text-align: right !important;
+}
+
+[style*="text-align:left"],
+[style*="text-align: left"],
+.preview-content [style*="text-align:left"],
+.preview-content [style*="text-align: left"],
+.newsletter-preview [style*="text-align:left"],
+.newsletter-preview [style*="text-align: left"] {
+  text-align: left !important;
+}
+
+[style*="text-align:justify"],
+[style*="text-align: justify"],
+.preview-content [style*="text-align:justify"],
+.preview-content [style*="text-align: justify"],
+.newsletter-preview [style*="text-align:justify"],
+.newsletter-preview [style*="text-align: justify"] {
+  text-align: justify !important;
+}
+
+/* Preserve text formatting */
+[style*="font-weight:bold"],
+[style*="font-weight: bold"] {
+  font-weight: bold !important;
+}
+
+[style*="font-style:italic"],
+[style*="font-style: italic"] {
+  font-style: italic !important;
+}
+
+[style*="text-decoration:underline"],
+[style*="text-decoration: underline"] {
+  text-decoration: underline !important;
+}
+
+.preview-content [style*="font-weight: bold"],
+.preview-content strong {
+  font-weight: bold !important;
+}
+
+/* Strong alignment preservation rules - ensure they override everything */
+[data-alignment="center"],
+[style*="text-align: center"],
+[style*="text-align:center"] {
+  text-align: center !important;
+}
+
+[data-alignment="right"],
+[style*="text-align: right"],
+[style*="text-align:right"] {
+  text-align: right !important;
+}
+
+[data-alignment="left"],
+[style*="text-align: left"],
+[style*="text-align:left"] {
+  text-align: left !important;
+}
+
+[data-alignment="justify"],
+[style*="text-align: justify"],
+[style*="text-align:justify"] {
+  text-align: justify !important;
+}
+
+/* Specific overrides for preview mode containers */
+.newsletter-preview [data-alignment="center"],
+.preview-container [data-alignment="center"],
+.preview-content [data-alignment="center"] {
+  text-align: center !important;
+}
+
+.newsletter-preview [data-alignment="right"],
+.preview-container [data-alignment="right"],
+.preview-content [data-alignment="right"] {
+  text-align: right !important;
+}
+
+.newsletter-preview [data-alignment="left"],
+.preview-container [data-alignment="left"],
+.preview-content [data-alignment="left"] {
+  text-align: left !important;
+}
+
+.newsletter-preview [data-alignment="justify"],
+.preview-container [data-alignment="justify"],
+.preview-content [data-alignment="justify"] {
+  text-align: justify !important;
+}
+
+/* Force alignment even in preview */
+.rich-text-editor [contenteditable="true"][style*="text-align"],
+.preview-container [style*="text-align"],
+.newsletter-preview [style*="text-align"],
+.preview-content [style*="text-align"] {
+  text-align: var(--text-align, inherit) !important;
+}
+
+/* Fix for preview mode to maintain alignment */
+.newsletter-preview p,
+.newsletter-preview h1,
+.newsletter-preview h2,
+.newsletter-preview h3,
+.newsletter-preview h4,
+.newsletter-preview h5,
+.newsletter-preview h6,
+.newsletter-preview div,
+.newsletter-preview ul,
+.newsletter-preview ol,
+.newsletter-preview li,
+.preview-container p,
+.preview-container h1,
+.preview-container h2,
+.preview-container h3,
+.preview-container h4,
+.preview-container h5,
+.preview-container h6,
+.preview-container div,
+.preview-container ul,
+.preview-container ol,
+.preview-container li,
+.preview-content p,
+.preview-content h1,
+.preview-content h2,
+.preview-content h3,
+.preview-content h4,
+.preview-content h5,
+.preview-content h6,
+.preview-content div,
+.preview-content ul,
+.preview-content ol,
+.preview-content li {
+  text-align: inherit;
+}
+
+.preview-content [style*="font-style: italic"],
+.preview-content em {
+  font-style: italic !important;
+}
+
+.preview-content [style*="text-decoration: underline"],
+.preview-content u {
+  text-decoration: underline !important;
+}
+
+.preview-content div[style*="text-align:center"] {
+  text-align: center !important;
+}
+
+.preview-content div[style*="text-align:right"] {
+  text-align: right !important;
+}
+
+.preview-content div[style*="text-align:left"] {
+  text-align: left !important;
+}
+
+.preview-content div[style*="text-align:justify"] {
+  text-align: justify !important;
+}
+
+.preview-content p[style*="text-align:center"] {
+  text-align: center !important;
+}
+
+.preview-content p[style*="text-align:right"] {
+  text-align: right !important;
+}
+
+.preview-content p[style*="text-align:left"] {
+  text-align: left !important;
+}
+
+.preview-content p[style*="text-align:justify"] {
+  text-align: justify !important;
+}
+
+.preview-content h1[style*="text-align:center"] {
+  text-align: center !important;
+}
+
+.preview-content h1[style*="text-align:right"] {
+  text-align: right !important;
+}
+
+.preview-content h1[style*="text-align:left"] {
+  text-align: left !important;
+}
+
+.preview-content h1[style*="text-align:justify"] {
+  text-align: justify !important;
+}
+
+.preview-content h2[style*="text-align:center"] {
+  text-align: center !important;
+}
+
+.preview-content h2[style*="text-align:right"] {
+  text-align: right !important;
+}
+
+.preview-content h2[style*="text-align:left"] {
+  text-align: left !important;
+}
+
+.preview-content h2[style*="text-align:justify"] {
+  text-align: justify !important;
+}
+
+.preview-content h3[style*="text-align:center"] {
+  text-align: center !important;
+}
+
+.preview-content h3[style*="text-align:right"] {
+  text-align: right !important;
+}
+
+.preview-content h3[style*="text-align:left"] {
+  text-align: left !important;
+}
+
+.preview-content h3[style*="text-align:justify"] {
+  text-align: justify !important;
+}
+
+.preview-content ul,
+.preview-content ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.preview-content ul,
+.rich-text-editor [data-block-type="bullet-list"] {
+  list-style-type: disc !important;
+  padding-left: 2rem !important;
+  display: block !important;
+  text-align: inherit !important; /* Respect data-alignment */
+}
+
+.preview-content ol,
+.rich-text-editor [data-block-type="number-list"] {
+  list-style-type: decimal !important;
+  padding-left: 2rem !important;
+  display: block !important;
+  text-align: inherit !important; /* Respect data-alignment */
+}
+
+.rich-text-editor [data-block-type="bullet-list"] li,
+.rich-text-editor [data-block-type="number-list"] li {
+  display: list-item !important;
+  margin: 0.5rem 0 !important;
+}
+
+.preview-content .icons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.rich-text-editor [data-block-type="image"] img {
+  max-width: 100%;
+  height: auto;
+}
+
+.rich-text-editor [data-block-type="image"] img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
+.rich-text-editor .image-wrapper {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* Divider Styles */
+.rich-text-editor .divider-block {
+  width: 100% !important;
+  margin: 20px 0 !important;
+  text-align: center !important;
+  display: block !important;
+  position: relative !important;
+  cursor: default !important;
+}
+
+.rich-text-editor .divider-block p {
+  border-top: 1px solid #666666 !important;
+  font-size: 1px !important;
+  margin: 20px auto !important;
+  width: 100% !important;
+  height: 0 !important;
+  padding: 0 !important;
+}
+
+.preview-content .divider-block,
+.newsletter-preview .divider-block {
+  width: 100% !important;
+  margin: 20px 0 !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+.preview-content .divider-block p,
+.newsletter-preview .divider-block p {
+  border-top: 1px solid #666666 !important;
+  font-size: 1px !important;
+  margin: 20px auto !important;
+  width: 100% !important;
+  height: 0 !important;
+  padding: 0 !important;
+}
+
+/* Icon Container Styles */
+.rich-text-editor .icons-container {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  min-height: 48px;
+  max-width: 300px;
+  border-radius: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  vertical-align: top;
+}
+
+/* Button styling based on theme */
+.rich-text-editor button svg {
+  color: #000000;
+}
+
+[data-theme="dark"] .rich-text-editor button svg {
+  color: #ffffff !important;
+}
+
+.rich-text-editor .icons-container a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.rich-text-editor .icon-edit-button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.rich-text-editor .icons-container a:hover .icon-edit-button {
+  opacity: 1;
+}
+
+.rich-text-editor .icon-add-button {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.rich-text-editor .icons-container:hover .icon-add-button,
+.rich-text-editor .button-block:hover .icon-add-button,
+.rich-text-editor .image-block:hover .icon-add-button {
+  opacity: 1;
+}
+
+.rich-text-editor .icons-container a:hover,
+.rich-text-editor .button-block a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.rich-text-editor .icons-container svg,
+.rich-text-editor .button-block svg {
+  width: 24px;
+  height: 24px;
+  color: #6054d6;
+  /* Purple icon color */
+}
+
+.rich-text-editor .icons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 48px;
+}
+
+/* Button block styling */
+.rich-text-editor .button-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0 !important;
+  position: relative;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+.rich-text-editor .button-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: auto !important;
+  max-width: fit-content !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 1;
+}
+
+/* Preview mode styles */
+.preview-content .button-block,
+.newsletter-preview .button-block,
+div[class*="newsletter"] .button-block,
+div[class*="preview"] .button-block,
+[class*="newsletter-content"] .button-block,
+[class*="preview-content"] .button-block {
+  margin: 8px 0 !important;
+  text-align: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 10 !important;
+}
+
+/* Preserve the alignment of button blocks in preview */
+html body .preview-content .button-block[style*="text-align:left"],
+html body .newsletter-preview .button-block[style*="text-align:left"],
+html body .preview-content .button-block[style*="text-align: left"],
+html body .newsletter-preview .button-block[style*="text-align: left"],
+html body .preview-content .button-block[data-alignment="left"],
+html body .newsletter-preview .button-block[data-alignment="left"] {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  display: flex !important;
+}
+
+html body .preview-content .button-block[style*="text-align:right"],
+html body .newsletter-preview .button-block[style*="text-align:right"],
+html body .preview-content .button-block[style*="text-align: right"],
+html body .newsletter-preview .button-block[style*="text-align: right"],
+html body .preview-content .button-block[data-alignment="right"],
+html body .newsletter-preview .button-block[data-alignment="right"] {
+  justify-content: flex-end !important;
+  text-align: right !important;
+  display: flex !important;
+}
+
+.preview-content .button-block a,
+.newsletter-preview .button-block a {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  max-width: fit-content !important;
+  padding: 8px 16px !important;
+  height: auto !important;
+  min-height: 36px !important;
+  max-height: 48px !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure button styles are preserved in preview */
+.preview-content .button-block [class*="bg-"],
+.newsletter-preview .button-block [class*="bg-"] {
+  background-color: var(--bg-color, inherit) !important;
+  width: auto !important;
+  max-width: fit-content !important;
+}
+
+/* Button block hover and focus states */
+.rich-text-editor .button-block:hover,
+.rich-text-editor .button-block:focus-within {
+  z-index: 2;
+}
+
+/* Preserve button styles in all contexts */
+.rich-text-editor .button-block a,
+.preview-content .button-block a,
+.newsletter-preview .button-block a,
+.rich-text-editor .button-block a[style],
+.preview-content .button-block a[style],
+.newsletter-preview .button-block a[style] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  max-width: fit-content !important;
+  min-height: 36px !important;
+  max-height: 48px !important;
+  padding: 8px 16px !important;
+  position: relative !important;
+  z-index: 1 !important;
+  text-decoration: none !important;
+  background-color: var(--background-color, inherit) !important;
+  color: var(--color, inherit) !important;
+}
+
+/* Make sure button alignment follows parent button-block alignment */
+html body .preview-content .button-block[style*="text-align:left"] a,
+html body .newsletter-preview .button-block[style*="text-align:left"] a,
+html body .preview-content .button-block[style*="text-align: left"] a,
+html body .newsletter-preview .button-block[style*="text-align: left"] a,
+html body .preview-content .button-block[data-alignment="left"] a,
+html body .newsletter-preview .button-block[data-alignment="left"] a,
+html body [class*="newsletter"] .button-block[data-alignment="left"] a,
+html body div[class*="preview"] .button-block[data-alignment="left"] a {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  align-self: flex-start !important;
+}
+
+html body .preview-content .button-block[style*="text-align:right"] a,
+html body .newsletter-preview .button-block[style*="text-align:right"] a,
+html body .preview-content .button-block[style*="text-align: right"] a,
+html body .newsletter-preview .button-block[style*="text-align: right"] a,
+html body .preview-content .button-block[data-alignment="right"] a,
+html body .newsletter-preview .button-block[data-alignment="right"] a,
+html body [class*="newsletter"] .button-block[data-alignment="right"] a,
+html body div[class*="preview"] .button-block[data-alignment="right"] a {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  align-self: flex-end !important;
+}
+
+html body .preview-content .button-block[style*="text-align:center"] a,
+html body .newsletter-preview .button-block[style*="text-align:center"] a,
+html body .preview-content .button-block[style*="text-align: center"] a,
+html body .newsletter-preview .button-block[style*="text-align: center"] a,
+html body .preview-content .button-block[data-alignment="center"] a,
+html body .newsletter-preview .button-block[data-alignment="center"] a,
+html body [class*="newsletter"] .button-block[data-alignment="center"] a,
+html body div[class*="preview"] .button-block[data-alignment="center"] a {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  align-self: center !important;
+}
+
+/* Add this to style the "Add Block" button row */
+.rich-text-editor .add-block-row {
+  background-color: white;
+}
+
+/* Ensure Add Block button always has white background */
+
+/* Style the dropdown trigger specifically for Add Block button */
+.rich-text-editor .editor-header .gap-2[aria-expanded],
+.rich-text-editor .editor-header .gap-2[aria-haspopup="dialog"] {
+  background-color: white !important;
+  color: black !important;
+}
+
+.rich-text-editor .editor-header {
+  padding: 12px !important;
+}
+
+.rich-text-editor .editor-header button,
+.rich-text-editor [data-theme="dark"] .editor-header button,
+.rich-text-editor button[aria-expanded="true"] {
+  background-color: white !important;
+  color: black !important;
+}
+
+.rich-text-editor .editor-header .toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 8px;
+  width: 100%;
+}
+
+/* Floating Toolbar Styles */
+.rich-text-editor .floating-toolbar {
+  position: fixed;
+  z-index: 1000;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.rich-text-editor .floating-toolbar button {
+  padding: 4px;
+  min-width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: black;
+}
+
+.rich-text-editor .floating-toolbar button:hover {
+  background: var(--accent);
+}
+
+.rich-text-editor .floating-toolbar button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rich-text-editor .floating-toolbar .color-preview {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Dark mode support */
+[data-theme="dark"] .rich-text-editor .floating-toolbar {
+  background: white;
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .rich-text-editor .floating-toolbar button {
+  color: black;
+}
+
+[data-theme="dark"] .rich-text-editor .floating-toolbar button svg.lucide-bold,
+[data-theme="dark"] .rich-text-editor .floating-toolbar button svg.lucide-bold path {
+  color: black !important;
+  stroke: black !important;
+  fill: none !important;
+}
+
+[data-theme="dark"] .rich-text-editor .floating-toolbar button:hover {
+  background-color: var(--accent);
+}
+
+[data-theme="dark"] .rich-text-editor .floating-toolbar button:hover {
+  background: var(--accent);
+}

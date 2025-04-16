@@ -1,0 +1,44 @@
+@tanstack_react-query.js?v=1b3ced19:2799 Uncaught Error: No QueryClient set, use QueryClientProvider to set one
+    at useQueryClient (@tanstack_react-query.js?v=1b3ced19:2799:11)
+    at useBaseQuery (@tanstack_react-query.js?v=1b3ced19:2998:18)
+    at useQuery (@tanstack_react-query.js?v=1b3ced19:3067:10)
+    at CreditWidget (credit-widget.tsx:22:31)
+    at renderWithHooks (chunk-M4O5KPJP.js?v=3270bf93:11548:26)
+    at mountIndeterminateComponent (chunk-M4O5KPJP.js?v=3270bf93:14926:21)
+    at beginWork (chunk-M4O5KPJP.js?v=3270bf93:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-M4O5KPJP.js?v=3270bf93:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-M4O5KPJP.js?v=3270bf93:3699:24)
+    at invokeGuardedCallback (chunk-M4O5KPJP.js?v=3270bf93:3733:39)Understand this error
+chunk-M4O5KPJP.js?v=3270bf93:14032 The above error occurred in the <CreditWidget> component:
+
+    at CreditWidget (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/src/components/credit-widget.tsx:24:3)
+    at div
+    at div
+    at div
+    at main
+    at div
+    at DashboardLayout (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/src/components/dashboard-layout.tsx:38:35)
+    at Dashboard (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/src/pages/dashboard.tsx:95:28)
+    at PrivateRoute (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/src/App.tsx:41:36)
+    at Route (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/node_modules/.vite/deps/wouter.js?v=5cc2db89:191:16)
+    at Switch (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/node_modules/.vite/deps/wouter.js?v=5cc2db89:247:17)
+    at OnboardingProvider (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/src/components/onboarding/OnboardingProvider.tsx:111:38)
+    at App
+    at div
+    at SWRConfig (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/node_modules/.vite/deps/swr.js?v=2e0e0677:424:11)
+    at ThemeProvider (https://3d030f67-658e-46ea-b894-789f1060c0e1-00-rfnzxambwv0e.sisko.replit.dev/src/components/theme-provider.tsx:25:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-M4O5KPJP.js?v=3270bf93:14032Understand this error
+chunk-M4O5KPJP.js?v=3270bf93:9129 Uncaught Error: No QueryClient set, use QueryClientProvider to set one
+    at useQueryClient (@tanstack_react-query.js?v=1b3ced19:2799:11)
+    at useBaseQuery (@tanstack_react-query.js?v=1b3ced19:2998:18)
+    at useQuery (@tanstack_react-query.js?v=1b3ced19:3067:10)
+    at CreditWidget (credit-widget.tsx:22:31)
+    at renderWithHooks (chunk-M4O5KPJP.js?v=3270bf93:11548:26)
+    at mountIndeterminateComponent (chunk-M4O5KPJP.js?v=3270bf93:14926:21)
+    at beginWork (chunk-M4O5KPJP.js?v=3270bf93:15914:22)
+    at beginWork$1 (chunk-M4O5KPJP.js?v=3270bf93:19753:22)
+    at performUnitOfWork (chunk-M4O5KPJP.js?v=3270bf93:19198:20)
+    at workLoopSync (chunk-M4O5KPJP.js?v=3270bf93:19137:13)

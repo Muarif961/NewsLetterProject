@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS smtp_settings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    smtp_server TEXT NOT NULL,
+    smtp_port INTEGER NOT NULL,
+    smtp_username TEXT NOT NULL,
+    smtp_password TEXT NOT NULL,
+    ssl_enabled BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
